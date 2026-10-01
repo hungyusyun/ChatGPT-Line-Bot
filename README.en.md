@@ -51,7 +51,8 @@ Import the ChatGPT bot to Line and start interacting with it by simply typing te
     2. Click on `Got it` on the right side to add environment variables, which includes:
         1. Desired model:
             - key: `OPENAI_MODEL_ENGINE`
-            - value: `gpt-3.5-turbo`
+            - value: `gpt-5-mini` (optional, default)
+        - Also required: `OPENAI_API_KEY`, and `ALLOWED_USER_IDS` (comma-separated LINE user IDs allowed to use the bot; leave empty at first and the bot will reply with your user ID). Optional: `OPENAI_IMAGE_MODEL` (default `gpt-image-1`), `OPENAI_TRANSCRIBE_MODEL` (default `gpt-4o-mini-transcribe`).
         2. ChatGPT wants the assistant to play the role of a keyword (currently, no further usage instructions have been officially released, and players can test it themselves).
             - key: `SYSTEM_MESSAGE`
             - value: `You are a helpful assistant.`
@@ -81,10 +82,9 @@ To start a conversation with ChatGPT, simply type your message in the text input
 
 | Command | Description |
 | ------- | ----------- |
-| `/註冊` | Enter `/註冊` + OpenAI API Token in the input box to register your token|
 | `/系統訊息` | Enter `/系統訊息` + the role you want ChatGPT to play in the input box|
 | `/清除` | Enter `/清除` in the input box to clear the chat history|
-| `/圖像` | Enter `/圖像` + command in the input box to call the DALL·E 2 model and generate an image|
+| `/圖像` | Enter `/圖像` + command in the input box to generate an image|
 | Voice input | Use voice input, the system will automatically translate the voice into text, and ChatGPT will respond in text| 
 | Text input | Directly input text to enter the normal ChatGPT conversation mode|
 

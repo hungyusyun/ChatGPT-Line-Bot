@@ -6,13 +6,14 @@
 
 
 ## 更新
+- 2026/10/01 改為自用版：移除 MongoDB 與 `/註冊`，改用環境變數 `OPENAI_API_KEY`；新增 `ALLOWED_USER_IDS` 白名單；模型升級為 `gpt-5-mini`、`gpt-image-1`、`gpt-4o-mini-transcribe`
 - 2023/03/23 更新總結 Youtube 影片內容、新聞文章（支援：聯合報、Yahoo 新聞、三立新聞網、中央通訊社、風傳媒、TVBS、自由時報、ETtoday、中時新聞網、Line 新聞、台視新聞網）
 - 2023/03/18 新增 Whipser 服務、用戶可以新增自己的 Token、新增指令（參考文件下方）
 - 2023/03/03 模型換成 chat completion: `gpt-3.5-turbo`
 
 
 ## 介紹
-在 Line 中去導入 ChatGPT Bot，只要在輸入框直接輸入文字，即可與 ChatGPT 開始互動，除了 ChatGPT 以外，也直接串上了 DALL·E 2 的模型，輸入 `/imagine + 文字`，就會回傳相對應的圖片，如下圖所示：
+在 Line 中去導入 ChatGPT Bot，只要在輸入框直接輸入文字，即可與 ChatGPT 開始互動，除了 ChatGPT 以外，也直接串上了生圖模型，輸入 `/圖像 + 文字`，就會回傳相對應的圖片，如下圖所示：
 
 ![Demo](https://github.com/TheExplainthis/ChatGPT-Line-Bot/blob/main/demo/chatgpt-line-bot.gif)
 
@@ -49,16 +50,24 @@
 1. 環境變數設定
     1. 接續上一步 `Import` 完成後在 `Replit` 的專案管理頁面左下方 `Tools` 點擊 `Secrets`。
     2. 右方按下 `Got it` 後，即可新增環境變數，需新增：
-        1. 欲選擇的模型：
-            - key: `OPENAI_MODEL_ENGINE`
-            - value: `gpt-3.5-turbo`  
-        2. ChatGPT 要讓助理扮演的角色詞（目前官方無釋出更多的使用方法，由玩家自行測試）
+        1. OpenAI API Key：
+            - key: `OPENAI_API_KEY`
+            - value: `[由步驟一取得]`
+        2. 欲選擇的模型（選填，以下為預設值）：
+            - `OPENAI_MODEL_ENGINE`：`gpt-5-mini`（對話、總結）
+            - `OPENAI_IMAGE_MODEL`：`gpt-image-1`（生圖）
+            - `OPENAI_TRANSCRIBE_MODEL`：`gpt-4o-mini-transcribe`（語音轉文字）
+        3. 白名單（只有名單內的人能用，避免陌生人燒你的額度）：
+            - key: `ALLOWED_USER_IDS`
+            - value: 你的 LINE user_id，多人用逗號分隔
+            - 不知道自己的 user_id？先留空啟動，傳任何訊息給 bot，它會回覆你的 user_id，填進來後重新啟動即可
+        4. ChatGPT 要讓助理扮演的角色詞（目前官方無釋出更多的使用方法，由玩家自行測試）
             - key: `SYSTEM_MESSAGE`
             - value: `You are a helpful assistant.`
-        3. Line Channel Secret:
+        5. Line Channel Secret:
             - key: `LINE_CHANNEL_SECRET`
             - value: `[由步驟一取得]`
-        4. Line Channel Access Token:
+        6. Line Channel Access Token:
             - key: `LINE_CHANNEL_ACCESS_TOKEN`
             - value: `[由步驟一取得]`
 2. 開始執行
@@ -80,10 +89,9 @@
 
 | 指令 | 說明 |
 | --- | ----- |
-| `/註冊` | 在輸入框輸入 `/註冊 ` + OpenAI API Token，就可以註冊 Token|
 | `/系統訊息` | 在輸入框輸入 `/系統訊息 ` + 可以設定希望 ChatGPT 扮演什麼角色|
 | `/清除` | 在輸入框輸入 `/清除 `，就可以清除歷史訊息|
-| `/圖像` | 在輸入框輸入 `/圖像` + 指令，就會調用 DALL·E 2 模型，即可生成圖像。|
+| `/圖像` | 在輸入框輸入 `/圖像` + 指令，即可生成圖像。|
 | 語音輸入 | 利用語音輸入，系統會自動將語音翻譯成文字，並且 ChatGPT 以文字回應| 
 | 其他文字輸入 | 直接輸入文字，則會進入一般的 ChatGPT 對話模式|
 

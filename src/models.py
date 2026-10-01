@@ -12,7 +12,7 @@ class ModelInterface:
     def audio_transcriptions(self, file, model_engine: str) -> str:
         pass
 
-    def image_generations(self, prompt: str) -> str:
+    def image_generations(self, prompt: str, model_engine: str) -> str:
         pass
 
 
@@ -50,16 +50,22 @@ class OpenAIModel(ModelInterface):
         return self._request('POST', '/chat/completions', body=json_body)
 
     def audio_transcriptions(self, file_path, model_engine) -> str:
-        files = {
-            'file': open(file_path, 'rb'),
-            'model': (None, model_engine),
-        }
-        return self._request('POST', '/audio/transcriptions', files=files)
+        with open(file_path, 'rb') as f:
+            files = {
+                'file': f,
+                'model': (None, model_engine),
+            }
+            return self._request('POST', '/audio/transcriptions', files=files)
 
-    def image_generations(self, prompt: str) -> str:
+    def image_generations(self, prompt: str, model_engine: str) -> str:
         json_body = {
-            "prompt": prompt,
-            "n": 1,
-            "size": "512x512"
+            'model': model_engine,
+            'prompt': prompt,
+            'n': 1,
+            'size': '1024x1024'
         }
+        if model_engine.startswith('gpt-image'):
+            # gpt-image 系列只回傳 base64；用低畫質 JPEG 讓檔案小於 LINE 預覽圖 1MB 上限
+            json_body['quality'] = 'low'
+            json_body['output_format'] = 'jpeg'
         return self._request('POST', '/images/generations', body=json_body)
