@@ -122,3 +122,5 @@ dist
 # Generated images
 static/images/
 db.json
+__pycache__/
+*.pyc
